@@ -29,13 +29,15 @@ public class InspectionController {
         String result = "";
         result = (String) redisTemplate.opsForValue().get(key);
 
+        System.out.println(result);
         return result;
     }
 
-    @RequestMapping(value = "/set/{key}", method = RequestMethod.POST)
-    public String set(@PathVariable("key") String key) {
+        @RequestMapping(value = "/set/{key}", method = RequestMethod.POST)
+        public String set(@PathVariable("key") String key) {
 
         redisTemplate.opsForValue().set(key,value);
+        System.out.println("ok!!");
         return "ok";
     }
 

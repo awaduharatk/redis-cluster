@@ -1,23 +1,26 @@
 package inspectionrediscluster;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.Arrays;
 import java.util.List;
 
+@Data
 @Configuration
 public class InspectionConfiguration {
 
-    List<String> clusterNodes = Arrays.asList("127.0.0.1:7000");
+    @Value("${redis.cluster.nodes}")
+    List<String> nodes;
 
     @Bean
     RedisConnectionFactory connectionFactory() {
@@ -25,7 +28,8 @@ public class InspectionConfiguration {
         pool.setMaxTotal(100);
         pool.setMaxIdle(10);
         pool.setMinIdle(10);
-        return new JedisConnectionFactory(new RedisClusterConfiguration(clusterNodes));
+        pool.setTestOnBorrow(true);
+        return new JedisConnectionFactory(new RedisClusterConfiguration(nodes));
     }
 
     @Bean

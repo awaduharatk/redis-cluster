@@ -12,3 +12,4 @@ export REDIS_USE_STANDALONE=false
 ```
 
 
+`chmod -x ./gradlew`
